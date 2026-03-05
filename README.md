@@ -1,1 +1,1 @@
-# mcu
+cmake -G "Unix Makefiles" ..

@@ -36,10 +36,6 @@ static struct {
 
 static int32_t t_fine = 0;
 
-static bool bme280_telemetry_running = false;
-static uint64_t bme280_last_measure_us = 0;
-#define BME280_TELEMETRY_PERIOD_US 500000  // 500 ms
-
 static void bme280_read_calibration_data() {
     uint8_t buffer[24] = {0};
     
@@ -202,32 +198,3 @@ float bme280_read_humidity(void) {
     return (float)(v_x1_u32r >> 12) / 1024.0f;
 }
 
-void bme280_telemetry_start() {
-    bme280_telemetry_running = true;
-    bme280_last_measure_us = time_us_64();
-}
-
-void bme280_telemetry_stop() {
-    bme280_telemetry_running = false;
-}
-
-bool bme280_telemetry_is_running() {
-    return bme280_telemetry_running;
-}
-
-void bme280_telemetry_handler() {
-    if (!bme280_telemetry_running) {
-        return;
-    }
-    
-    uint64_t now = time_us_64();
-    if (now >= bme280_last_measure_us + BME280_TELEMETRY_PERIOD_US) {
-        bme280_last_measure_us = now;
-        
-        float temp = bme280_read_temperature();
-        float pres = bme280_read_pressure();
-        float hum = bme280_read_humidity();
-        
-        printf("%.2f %.2f %.2f\n", temp, pres, hum);
-    }
-}

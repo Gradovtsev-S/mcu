@@ -18,8 +18,3 @@ uint16_t bme280_read_hum_raw(void);
 float bme280_read_temperature(void);
 float bme280_read_pressure(void);
 float bme280_read_humidity(void);
-
-void bme280_telemetry_start(void);
-void bme280_telemetry_stop(void);
-void bme280_telemetry_handler(void);
-bool bme280_telemetry_is_running(void);
